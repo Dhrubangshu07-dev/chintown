@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Full menu of The China Town Barasat — Chinese, Indian, Momos, Biryani, Noodles, Tandoor, Mocktails. Order on WhatsApp.">
+  <title>Menu — The China Town, Barasat</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .menu-hero { padding: calc(var(--nav-h) + 4rem) 4vw 3rem; background: radial-gradient(ellipse at 80% 50%, rgba(230,57,70,0.1) 0%, transparent 60%), var(--black-2); border-bottom: 1px solid rgba(248,245,240,0.06); text-align: center; }
+    .menu-hero h1 { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 6rem); line-height: 1; letter-spacing: 0.03em; margin-bottom: 0.75rem; }
+    .menu-hero p { color: var(--white-dim); font-size: 1rem; max-width: 500px; margin: 0 auto 1.5rem; }
+
+    /* FILTER BAR */
+    .filter-bar { position: sticky; top: var(--nav-h); z-index: 100; background: rgba(10,10,10,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(248,245,240,0.07); padding: 0.8rem 4vw; display: flex; align-items: center; gap: 0.75rem; overflow-x: auto; scrollbar-width: none; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .search-wrap { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+    .search-icon { position: absolute; left: 10px; width: 14px; height: 14px; color: rgba(248,245,240,0.4); pointer-events: none; }
+    .search-input { background: rgba(248,245,240,0.07); border: 1.5px solid rgba(248,245,240,0.12); color: var(--white); padding: 0.48rem 2rem 0.48rem 2.1rem; border-radius: 30px; font-family: var(--font-body); font-size: 0.8rem; width: 180px; outline: none; transition: border-color 0.2s, width 0.2s; }
+    .search-input::placeholder { color: rgba(248,245,240,0.3); }
+    .search-input:focus { border-color: var(--red); width: 220px; }
+    .search-clear { position: absolute; right: 9px; background: none; border: none; color: rgba(248,245,240,0.4); cursor: pointer; font-size: 0.72rem; line-height: 1; padding: 2px 3px; display: none; }
+    .search-clear:hover { color: var(--red); }
+    .search-clear.show { display: block; }
+    .bar-divider { width: 1px; height: 20px; background: rgba(248,245,240,0.1); flex-shrink: 0; }
+    .filter-btn { background: rgba(248,245,240,0.06); border: 1px solid rgba(248,245,240,0.1); color: var(--white-dim); padding: 0.42rem 1rem; border-radius: 30px; font-family: var(--font-body); font-size: 0.78rem; font-weight: 500; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { background: var(--red); border-color: var(--red); color: var(--white); }
+    .veg-toggle-wrap { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; flex-shrink: 0; }
+    .veg-toggle-wrap label { font-size: 0.78rem; color: var(--white-dim); cursor: pointer; display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; }
+    .toggle-switch { position: relative; width: 38px; height: 21px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: rgba(248,245,240,0.1); border-radius: 21px; cursor: pointer; transition: 0.2s; }
+    .toggle-slider::after { content:''; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; background: var(--white-dim); border-radius: 50%; transition: 0.2s; }
+    .toggle-switch input:checked + .toggle-slider { background: var(--green); }
+    .toggle-switch input:checked + .toggle-slider::after { transform: translateX(17px); background: white; }
+
+    /* MENU BODY */
+    .menu-body { max-width: 1100px; margin: 0 auto; padding: 2.5rem 4vw 6rem; }
+    .menu-sec { margin-bottom: 3rem; }
+    .menu-sec-header { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.2rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(248,245,240,0.08); }
+    .menu-sec-icon { font-size: 1.4rem; }
+    .menu-sec-name { font-family: var(--font-display); font-size: 1.45rem; letter-spacing: 0.06em; }
+    .menu-sec-count { font-size: 0.72rem; color: var(--white-dim); background: rgba(248,245,240,0.07); padding: 0.18rem 0.55rem; border-radius: 20px; margin-left: auto; white-space: nowrap; }
+
+    /* ITEM ROW */
+    .items-list { display: flex; flex-direction: column; }
+    .mitem { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid rgba(248,245,240,0.045); transition: background 0.15s; }
+    .mitem:hover { background: rgba(248,245,240,0.02); padding-left: 6px; }
+    .mitem:last-child { border-bottom: none; }
+    .mitem-left { display: flex; align-items: flex-start; gap: 0.65rem; flex: 1; min-width: 0; }
+    .mitem-dot { margin-top: 5px; flex-shrink: 0; }
+    .mitem-info { flex: 1; min-width: 0; }
+    .mitem-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.15rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .mitem-desc { font-size: 0.77rem; color: var(--white-dim); line-height: 1.4; }
+    .mitem-right { display: flex; align-items: center; gap: 0.85rem; flex-shrink: 0; }
+    .mitem-price { font-family: var(--font-display); font-size: 1.15rem; color: var(--yellow); white-space: nowrap; }
+    .mitem-price .pr { font-size: 0.92rem; color: rgba(255,195,0,0.65); }
+    .btn-order-mini { background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.25); color: var(--red); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+    .btn-order-mini:hover { background: var(--red); color: var(--white); }
+
+    /* COMBO CARDS */
+    .combos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .combo-card { background: var(--black-3); border: 1px solid rgba(255,195,0,0.15); border-radius: 12px; padding: 1.1rem; position: relative; overflow: hidden; transition: border-color 0.2s; }
+    .combo-card::before { content:''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--red), var(--yellow)); }
+    .combo-card:hover { border-color: rgba(255,195,0,0.3); background: rgba(255,195,0,0.03); }
+    .combo-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow); margin-bottom: 0.25rem; }
+    .combo-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .combo-desc { font-size: 0.77rem; color: var(--white-dim); margin-bottom: 0.75rem; }
+    .combo-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+    .combo-price { font-family: var(--font-display); font-size: 1.5rem; color: var(--yellow); line-height: 1; }
+    .combo-save { font-size: 0.68rem; color: var(--green); font-weight: 600; margin-top: 1px; }
+
+    /* NO RESULTS */
+    .no-results { display: none; text-align: center; padding: 3.5rem 1rem; color: var(--white-dim); }
+    .no-results.show { display: block; }
+    .no-results-emoji { font-size: 2.2rem; margin-bottom: 0.6rem; }
+    .no-results h3 { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 0.35rem; color: var(--white); }
+    .no-results p { font-size: 0.85rem; }
+    .nr-clear { background: none; border: none; color: var(--red); cursor: pointer; font-size: inherit; font-family: inherit; text-decoration: underline; }
+
+    /* STICKY ORDER */
+    .sticky-order { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.97); backdrop-filter: blur(20px); border-top: 1px solid rgba(248,245,240,0.07); padding: 0.9rem 4vw; display: flex; align-items: center; justify-content: space-between; gap: 1rem; z-index: 800; }
+    .sticky-order-text { font-size: 0.83rem; color: var(--white-dim); }
+    .sticky-order-text strong { color: var(--white); }
+
+    @media (max-width: 768px) {
+      .combos-grid { grid-template-columns: 1fr; }
+      .sticky-order-text { display: none; }
+      .sticky-order .btn { flex: 1; justify-content: center; }
+      .search-input { width: 120px; }
+      .search-input:focus { width: 150px; }
+      .bar-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-en">THE CHINA TOWN</span>
+    <span class="nav-logo-bn">দি চায়না টাউন</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="nav-cta" target="_blank">Order Now →</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<div class="menu-hero">
+  <span class="section-label" style="justify-content:center;">Full Menu</span>
+  <h1>Our <span class="text-red">Menu</span></h1>
+  <p>Fresh, fast, and flavourful — Chinese, Indian, Bengali, Mughlai & more. Order in seconds.</p>
+  <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="btn btn-whatsapp" target="_blank">
+    <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    Order on WhatsApp
+  </a>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="search-input" class="search-input" type="text" placeholder="Search dishes…" autocomplete="off" spellcheck="false">
+    <button id="search-clear" class="search-clear" aria-label="Clear">✕</button>
+  </div>
+  <div class="bar-divider"></div>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="momo">🥟 Momos</button>
+  <button class="filter-btn" data-cat="noodles">🍜 Noodles</button>
+  <button class="filter-btn" data-cat="chinese">🐉 Chinese</button>
+  <button class="filter-btn" data-cat="indian">🍛 Indian</button>
+  <button class="filter-btn" data-cat="biryani">🍚 Biryani</button>
+  <button class="filter-btn" data-cat="tandoor">🔥 Tandoor</button>
+  <button class="filter-btn" data-cat="starters">🍗 Starters</button>
+  <button class="filter-btn" data-cat="soup">🥣 Soup</button>
+  <button class="filter-btn" data-cat="breads">🫓 Breads</button>
+  <button class="filter-btn" data-cat="rolls">🌯 Rolls</button>
+  <button class="filter-btn" data-cat="pasta">🍝 Pasta</button>
+  <button class="filter-btn" data-cat="salad">🥗 Salad</button>
+  <button class="filter-btn" data-cat="drinks">🥤 Drinks</button>
+  <button class="filter-btn" data-cat="combos">⚡ Combos</button>
+  <div class="veg-toggle-wrap">
+    <label for="veg-toggle"><span class="veg-dot"></span> Veg Only</label>
+    <label class="toggle-switch">
+      <input type="checkbox" id="veg-toggle">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+</div>
+
+<!-- MENU BODY -->
+<div class="menu-body" id="menu-body">
+
+<!-- ═══════════════════════════════════════════ MOMOS ═══ -->
+<div class="menu-sec" data-cat="momo">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🥟</span>
+    <span class="menu-sec-name">MOMO</span>
+    <span class="menu-sec-count">4 items</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+    <img src="pics/momos.png" alt="Momos" style="width:100%;height:180px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+    <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=600&q=80" alt="Fried Momos" style="width:100%;height:180px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="steam chicken momo steamed" data-desc="classic steamed chicken momos 5 pieces served with spicy chutney">
+      <div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Steam Chicken Momo <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🔥 Best Seller</span></div><div class="mitem-desc">Classic steamed chicken momos (5 pcs), served with spicy chutney.</div></div></div>
+      <div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Steam%20Chicken%20Momo" class="btn-order-mini" target="_blank">Order</a></div>
+    </div>
+    <div class="mitem" data-type="nonveg" data-name="fried chicken momo crispy" data-desc="deep fried crispy chicken momos golden outside juicy inside">
+      <div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Fried Chicken Momo</div><div class="mitem-desc">Deep-fried crispy chicken momos — golden outside, juicy inside.</div></div></div>
+      <div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Fried%20Chicken%20Momo" class="btn-order-mini" target="_blank">Order</a></div>
+    </div>
+    <div class="mitem" data-type="nonveg" data-name="pan fried chicken momo" data-desc="pan fried chicken momos crispy bottom soft top">
+      <div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Pan Fried Chicken Momo</div><div class="mitem-desc">Pan-fried for crispy bottoms and soft tops — a fan favourite.</div></div></div>
+      <div class="mitem-right"><span class="mitem-price">₹150</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Pan%20Fried%20Chicken%20Momo" class="btn-order-mini" target="_blank">Order</a></div>
+    </div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan momo spicy" data-desc="momos tossed in fiery schezwan sauce extra spicy">
+      <div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Momo <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🌶️ Spicy</span></div><div class="mitem-desc">Momos tossed in fiery Schezwan sauce. For the spice lovers.</div></div></div>
+      <div class="mitem-right"><span class="mitem-price">₹150</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Momo" class="btn-order-mini" target="_blank">Order</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ NOODLES ═══ -->
+<div class="menu-sec" data-cat="noodles">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🍜</span>
+    <span class="menu-sec-name">NOODLES</span>
+    <span class="menu-sec-count">10 items</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+    <img src="pics/noodles1.png" alt="Chowmein" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+    <img src="pics/noodles2.png" alt="Hakka Noodles" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+    <img src="pics/noodles3.png" alt="Schezwan Noodles" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+    <img src="pics/noodles4.png" alt="Noodles and Fried Rice" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="veg noodles hakka gravy" data-desc="wok tossed vegetable noodles hakka or gravy style"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg Noodles (Hakka / Gravy)</div><div class="mitem-desc">Wok-tossed vegetable noodles, Hakka or Gravy style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹90<span class="pr"> / ₹100</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Veg%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="egg noodles hakka gravy" data-desc="noodles tossed with egg hakka or gravy style"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Noodles (Hakka / Gravy)</div><div class="mitem-desc">Stir-fried noodles with egg, Hakka or Gravy style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110<span class="pr"> / ₹120</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken noodles hakka gravy" data-desc="chicken noodles hakka or gravy style"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Noodles (Hakka / Gravy)</div><div class="mitem-desc">Wok-tossed chicken noodles, Hakka or Gravy style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹140<span class="pr"> / ₹150</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="egg chicken noodles hakka gravy" data-desc="egg and chicken noodles combined hakka or gravy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Chicken Noodles (Hakka / Gravy)</div><div class="mitem-desc">Egg + chicken combo noodles, Hakka or Gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹150<span class="pr"> / ₹160</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Chicken%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="mixed noodles hakka gravy" data-desc="mixed noodles hakka or gravy style"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mixed Noodles (Hakka / Gravy)</div><div class="mitem-desc">Mixed veg + chicken noodles, Hakka or Gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹175<span class="pr"> / ₹185</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mixed%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="schezwan veg noodles spicy" data-desc="veg noodles in fiery schezwan sauce"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Veg Noodles <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🌶️</span></div><div class="mitem-desc">Veg noodles tossed in our signature Schezwan sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹100</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Veg%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan egg noodles spicy" data-desc="egg noodles in schezwan sauce spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Egg Noodles</div><div class="mitem-desc">Egg noodles in fiery Schezwan sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Egg%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan chicken noodles spicy" data-desc="chicken noodles in schezwan sauce spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Chicken Noodles</div><div class="mitem-desc">Chicken noodles in fiery Schezwan sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹150</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Chicken%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan egg chicken noodles" data-desc="egg and chicken in schezwan sauce noodles"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Egg Chicken</div><div class="mitem-desc">Egg + chicken in Schezwan sauce noodles.</div></div></div><div class="mitem-right"><span class="mitem-price">₹170</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Egg%20Chicken%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan mixed noodles" data-desc="mixed schezwan noodles spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Mixed Noodles</div><div class="mitem-desc">All-in mixed Schezwan noodles — ultimate combo.</div></div></div><div class="mitem-right"><span class="mitem-price">₹180</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Mixed%20Noodles" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="triple noodles rice non veg" data-desc="triple combination noodles and rice non veg special"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Triple Noodles Rice (Non Veg.) <span class="badge badge-yellow" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Special</span></div><div class="mitem-desc">A generous triple combination of noodles and rice — Non-Veg special.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Triple%20Noodles%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ FRIED RICE ═══ -->
+<div class="menu-sec" data-cat="noodles">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🍳</span>
+    <span class="menu-sec-name">FRIED RICE</span>
+    <span class="menu-sec-count">6 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="images/noodles4.png" alt="Fried Rice and Noodles" style="width:100%;height:150px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="veg fried rice egg fried rice chicken egg chicken mixed" data-desc="wok fried rice veg egg chicken egg chicken mixed flavors"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg / Egg / Chicken / Egg Chicken / Mixed</div><div class="mitem-desc">All varieties available. Pick your choice.</div></div></div><div class="mitem-right"><span class="mitem-price">₹125<span class="pr"> – ₹200</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Fried%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="schezwan rice veg egg chicken egg chicken mixed spicy" data-desc="schezwan style fried rice veg egg chicken mixed"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Rice <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🌶️ Spicy</span></div><div class="mitem-desc">Veg / Egg / Chicken / Egg Chicken / Mixed — all in Schezwan style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹135<span class="pr"> – ₹240</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="singapuri rice singapore rice veg egg chicken" data-desc="singapore style fried rice with spices veg egg chicken"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Singapuri Rice</div><div class="mitem-desc">Singapore-style spiced fried rice. Veg / Egg / Chicken / Mixed.</div></div></div><div class="mitem-right"><span class="mitem-price">₹135<span class="pr"> – ₹240</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Singapuri%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mongolian rice veg egg chicken" data-desc="mongolian style fried rice veg egg chicken"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mongolian Rice</div><div class="mitem-desc">Mongolian-style fried rice with bold flavours. Veg / Egg / Chicken.</div></div></div><div class="mitem-right"><span class="mitem-price">₹135<span class="pr"> – ₹240</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mongolian%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chilli garlic rice veg egg chicken" data-desc="chilli garlic fried rice veg egg chicken spicy garlicky"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chilli Garlic Rice</div><div class="mitem-desc">Spicy garlicky fried rice. Veg / Egg / Chicken / Mixed.</div></div></div><div class="mitem-right"><span class="mitem-price">₹135<span class="pr"> – ₹240</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chilli%20Garlic%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ CHINESE ═══ -->
+<div class="menu-sec" data-cat="chinese">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🐉</span>
+    <span class="menu-sec-name">CHINESE</span>
+    <span class="menu-sec-count">8 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=900&q=80" alt="Chinese food" style="width:100%;height:150px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="chilli chicken dry gravy 8 pcs" data-desc="crispy chicken in chilli sauce dry or gravy 8 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chilli Chicken (8 Pcs.) Dry / Gravy <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Popular</span></div><div class="mitem-desc">Crispy chicken in spicy chilli sauce — Dry or Gravy. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹220</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chilli%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken manchurian 8 pcs dry gravy" data-desc="chicken manchurian indo chinese classic dry or gravy 8 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Manchurian (8 Pcs.) Dry / Gravy</div><div class="mitem-desc">Indo-Chinese classic — crispy chicken in Manchurian sauce. Dry or Gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Manchurian" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="hot garlic chicken 8 pcs spicy" data-desc="chicken in hot garlic sauce spicy 8 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Hot Garlic Chicken (8 Pcs.) <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🌶️ Hot</span></div><div class="mitem-desc">Tender chicken in punchy hot garlic sauce. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Hot%20Garlic%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan chicken 8 pcs" data-desc="chicken in schezwan sauce 8 pieces spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Chicken (8 Pcs.)</div><div class="mitem-desc">Chicken in fiery Schezwan sauce. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="lemon chicken 8 pcs" data-desc="chicken in tangy lemon sauce 8 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Lemon Chicken (8 Pcs.)</div><div class="mitem-desc">Chicken in zesty lemon-glaze sauce. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹300</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Lemon%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="garlic fish 8 pcs" data-desc="fish in garlic sauce 8 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Garlic Fish (8 Pcs.)</div><div class="mitem-desc">Tender fish pieces tossed in a rich garlic sauce. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹300</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Garlic%20Fish" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chilli fish 8 pcs spicy" data-desc="crispy fish in chilli sauce 8 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chilli Fish (8 Pcs.)</div><div class="mitem-desc">Crispy fish in bold chilli sauce. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹300</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chilli%20Fish" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="schezwan fish 8 pcs" data-desc="fish in schezwan sauce 8 pieces spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Schezwan Fish (8 Pcs.)</div><div class="mitem-desc">Fish in fiery Schezwan sauce. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹300</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Schezwan%20Fish" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ STARTERS VEG ═══ -->
+<div class="menu-sec" data-cat="starters">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🥦</span>
+    <span class="menu-sec-name">STARTERS — VEG</span>
+    <span class="menu-sec-count">7 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=900&q=80" alt="Veg starters" style="width:100%;height:140px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="french fries crispy" data-desc="golden crispy french fries salted served with ketchup"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">French Fries</div><div class="mitem-desc">Golden crispy fries, lightly salted. Served with ketchup.</div></div></div><div class="mitem-right"><span class="mitem-price">₹130</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20French%20Fries" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="veg pakora 6 pcs" data-desc="crispy vegetable fritters 6 pieces served with chutney"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg. Pakora (6 pcs.)</div><div class="mitem-desc">Crispy vegetable fritters with spiced batter. Served with mint chutney.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Veg%20Pakora" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="bioled vegetable boiled" data-desc="steamed and lightly seasoned vegetables healthy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Bioled Vegetable</div><div class="mitem-desc">Lightly steamed and seasoned vegetables. Clean and healthy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹150</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Bioled%20Vegetable" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="crispy chilli baby corn" data-desc="crispy baby corn tossed in chilli sauce spicy veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Crispy Chilli Baby Corn</div><div class="mitem-desc">Crispy baby corn tossed in tangy chilli sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹210</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Crispy%20Chilli%20Baby%20Corn" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="crispy chilli french fries" data-desc="french fries tossed in chilli sauce spicy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Crispy Chilli French Fries</div><div class="mitem-desc">Fries tossed in bold chilli sauce — addictively good.</div></div></div><div class="mitem-right"><span class="mitem-price">₹160</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Crispy%20Chilli%20French%20Fries" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="paneer pakora 6 pcs" data-desc="paneer fritters 6 pieces crispy outside soft inside"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Paneer Pakora (6 pcs.)</div><div class="mitem-desc">Crispy outside, soft inside paneer fritters. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹180</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Paneer%20Pakora" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="dry chilli mushroom" data-desc="mushroom in dry chilli sauce spicy veg starter"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Dry Chilli Mushroom</div><div class="mitem-desc">Mushroom tossed in bold dry chilli sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹210</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Dry%20Chilli%20Mushroom" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ STARTERS NON-VEG ═══ -->
+<div class="menu-sec" data-cat="starters">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🍗</span>
+    <span class="menu-sec-name">STARTERS — NON VEG</span>
+    <span class="menu-sec-count">18 items</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=600&q=80" alt="Chicken starter" style="width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid rgba(248,245,240,0.07);">
+    <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=600&q=80" alt="Fish starter" style="width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="egg pakora 8 pcs" data-desc="egg fritters 8 pieces crispy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Pakora (8 pcs)</div><div class="mitem-desc">Crispy egg fritters. 8 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Pakora" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="onion pakora" data-desc="crispy onion fritters snack"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Onion Pakora</div><div class="mitem-desc">Crispy golden onion fritters.</div></div></div><div class="mitem-right"><span class="mitem-price">₹100</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Onion%20Pakora" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken pakora" data-desc="crispy fried chicken pakora starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Pakora</div><div class="mitem-desc">Juicy chicken pieces in crispy spiced batter.</div></div></div><div class="mitem-right"><span class="mitem-price">₹180</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Pakora" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="crispy chicken starter" data-desc="crispy fried chicken pieces golden"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Crispy Chicken</div><div class="mitem-desc">Perfectly crispy fried chicken pieces.</div></div></div><div class="mitem-right"><span class="mitem-price">₹220</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Crispy%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="fish fry 1 pc" data-desc="single piece fried fish crispy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Fish Fry (1 pc)</div><div class="mitem-desc">Single crispy fried fish piece with dip.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Fish%20Fry" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="dry chilli chicken" data-desc="chicken in dry chilli sauce spicy starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Dry Chilli Chicken</div><div class="mitem-desc">Chicken tossed in a bold dry chilli sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹220</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Dry%20Chilli%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken lollipop 6 pcs" data-desc="chicken lollipop 6 pieces fried starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Lollipop (6 pcs)</div><div class="mitem-desc">Juicy chicken lollipops, fried golden. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹200</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Lollipop" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chat pata chicken spicy tangy" data-desc="tangy spicy chat pata chicken starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chat Pata Chicken</div><div class="mitem-desc">Tangy & spicy chat-pata style chicken.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chat%20Pata%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken drums of heaven 6 pcs" data-desc="chicken drumettes 6 pieces crispy starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Drums of Heaven (6 pcs)</div><div class="mitem-desc">Crispy chicken drumettes in signature sauce. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Drums%20of%20Heaven" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="crispy honey chicken sweet" data-desc="crispy chicken in honey glaze sauce sweet and spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Crispy Honey Chicken</div><div class="mitem-desc">Crispy chicken in sweet honey glaze sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Crispy%20Honey%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="pepper chicken" data-desc="chicken in black pepper sauce starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Pepper Chicken</div><div class="mitem-desc">Juicy chicken in bold black pepper sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Pepper%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="kfc fried chicken 6 pcs crispy" data-desc="kfc style crispy fried chicken 6 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">KFC Fried Chicken (6 pcs)</div><div class="mitem-desc">KFC-style crispy fried chicken. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20KFC%20Fried%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="dragon chicken" data-desc="spicy dragon style chicken starter"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Dragon Chicken <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🌶️ Hot</span></div><div class="mitem-desc">Fiery dragon-style chicken with bold spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Dragon%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken 65 spicy" data-desc="south indian style chicken 65 deep fried spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken 65</div><div class="mitem-desc">South Indian-style deep-fried spicy chicken.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%2065" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken salt pepper" data-desc="chicken with salt and pepper seasoning"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Salt Pepper</div><div class="mitem-desc">Chicken tossed with aromatic salt and pepper seasoning.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Salt%20Pepper" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="fish finger 6 pcs" data-desc="crispy fish finger 6 pieces served with dip"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Fish Finger (6 pcs)</div><div class="mitem-desc">Golden crispy fish fingers. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Fish%20Finger" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="bbq chicken barbecue" data-desc="bbq style grilled chicken smoky"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">BBQ Chicken</div><div class="mitem-desc">Smoky BBQ-glazed chicken — chargrilled perfection.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20BBQ%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken pan fried lollipop 6 pcs" data-desc="pan fried chicken lollipop 6 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Pan Fried Lollipop (6 pcs)</div><div class="mitem-desc">Pan-fried chicken lollipops with crispy coating. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Pan%20Fried%20Lollipop" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="fish pakora 6 pcs" data-desc="crispy fish pakora 6 pieces battered fried"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Fish Pakora (6 pcs)</div><div class="mitem-desc">Crispy battered fish pakora. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Fish%20Pakora" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="kung pao chicken spicy peanut" data-desc="classic kung pao chicken with peanuts spicy tangy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Kung Pao Chicken</div><div class="mitem-desc">Classic Kung Pao with chicken, peanuts & chilli.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Kung%20Pao%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="devil chicken very spicy hot" data-desc="extremely spicy devil style chicken for spice lovers"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Devil Chicken <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🔥 Extreme</span></div><div class="mitem-desc">Extremely spicy devil-style chicken. For true spice lovers only.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Devil%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SOUP ═══ -->
+<div class="menu-sec" data-cat="soup">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🥣</span>
+    <span class="menu-sec-name">SOUP</span>
+    <span class="menu-sec-count">5 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=900&q=80" alt="Soup" style="width:100%;height:130px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="clean soup veg non veg" data-desc="clear broth light clean soup veg non veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Clean Soup</div><div class="mitem-desc">Light clear broth soup. Veg only.</div></div></div><div class="mitem-right"><span class="mitem-price">₹100</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Clean%20Soup" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="sweet corn soup veg non veg" data-desc="creamy sweet corn soup veg or non veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Sweet Corn Soup</div><div class="mitem-desc">Creamy sweet corn soup. Veg ₹120 / Non-Veg ₹140.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120<span class="pr"> / ₹140</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Sweet%20Corn%20Soup" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="hot sour soup veg non veg" data-desc="hot and sour soup tangy spicy veg or non veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Hot 'N' Sour Soup</div><div class="mitem-desc">Tangy & spicy hot and sour soup. Veg ₹120 / Non-Veg ₹140.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120<span class="pr"> / ₹140</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Hot%20N%20Sour%20Soup" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="manchow soup veg non veg" data-desc="manchow soup with crispy noodles veg or non veg"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Manchow Soup</div><div class="mitem-desc">Manchow soup with crunchy fried noodles. Veg ₹120 / Non-Veg ₹145.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120<span class="pr"> / ₹145</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Manchow%20Soup" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="lemon coriander soup veg non veg" data-desc="fresh lemon coriander soup light tangy veg non veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Lemon Coriander Soup</div><div class="mitem-desc">Light & fresh lemon coriander soup. Veg ₹120 / Non-Veg ₹140.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120<span class="pr"> / ₹140</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Lemon%20Coriander%20Soup" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ INDIAN VEG ═══ -->
+<div class="menu-sec" data-cat="indian">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🌿</span>
+    <span class="menu-sec-name">MAIN COURSE — VEG</span>
+    <span class="menu-sec-count">14 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=900&q=80" alt="Indian veg curry" style="width:100%;height:150px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="veg tadka dal" data-desc="dal tadka with fresh spices and ghee veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg Tadka</div><div class="mitem-desc">Classic lentil tadka tempered with aromatic spices and ghee.</div></div></div><div class="mitem-right"><span class="mitem-price">₹90</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Veg%20Tadka" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chana masala chickpea curry" data-desc="spiced chickpea curry north indian chana masala"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chana Masala</div><div class="mitem-desc">Hearty spiced chickpea curry — North Indian classic.</div></div></div><div class="mitem-right"><span class="mitem-price">₹150</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chana%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chana mushroom masala" data-desc="chickpea and mushroom masala curry"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chana Mushroom Masala</div><div class="mitem-desc">Chickpea + mushroom in rich masala gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹220</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chana%20Mushroom%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chana paneer masala" data-desc="chickpea and paneer in masala gravy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chana Paneer Masala</div><div class="mitem-desc">Chickpea + paneer in spiced masala gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹220</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chana%20Paneer%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mushroom masala curry" data-desc="mushroom in spiced masala gravy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mushroom Masala</div><div class="mitem-desc">Earthy mushrooms in aromatic masala gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹220</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mushroom%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mushroom paneer masala" data-desc="mushroom and paneer in masala gravy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mushroom Paneer Masala</div><div class="mitem-desc">Mushroom + paneer in rich masala sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mushroom%20Paneer%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="shahi paneer royal" data-desc="paneer in rich creamy shahi gravy royal dish"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Shahi Paneer <span class="badge badge-yellow" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Royal</span></div><div class="mitem-desc">Paneer in rich, creamy royal Shahi gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹280</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Shahi%20Paneer" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="paneer butter masala" data-desc="paneer in buttery tomato cream sauce popular north indian"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Paneer Butter Masala <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Popular</span></div><div class="mitem-desc">Paneer cubes in buttery tomato-cream sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Paneer%20Butter%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="kadai paneer" data-desc="paneer in kadai style spicy gravy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Kadai Paneer</div><div class="mitem-desc">Paneer cooked kadai-style with capsicum and spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Kadai%20Paneer" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="dal makhani black lentil" data-desc="slow cooked black lentil dal makhani creamy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Dal Makhani</div><div class="mitem-desc">Slow-cooked creamy black lentil dal — restaurant style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹160</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Dal%20Makhani" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mixed veg curry" data-desc="mixed seasonal vegetables in curry gravy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mixed Veg.</div><div class="mitem-desc">Seasonal mixed vegetables in spiced gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹180</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mixed%20Veg" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="paneer do piyaza double onion" data-desc="paneer in double onion masala gravy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Paneer Do Piyaza</div><div class="mitem-desc">Paneer cooked with double onion masala gravy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Paneer%20Do%20Piyaza" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chilli paneer spicy indo chinese" data-desc="paneer in chilli sauce indo chinese style"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chilli Paneer</div><div class="mitem-desc">Indo-Chinese style paneer in bold chilli sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chilli%20Paneer" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="veg manchurian" data-desc="vegetable manchurian balls in sauce indo chinese"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg. Manchurian</div><div class="mitem-desc">Vegetable Manchurian balls in tangy Indo-Chinese sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹170</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Veg%20Manchurian" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chilli mushroom" data-desc="mushroom in chilli sauce indo chinese style"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chilli Mushroom</div><div class="mitem-desc">Mushroom tossed in bold Indo-Chinese chilli sauce.</div></div></div><div class="mitem-right"><span class="mitem-price">₹210</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chilli%20Mushroom" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ INDIAN NON-VEG ═══ -->
+<div class="menu-sec" data-cat="indian">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🍗</span>
+    <span class="menu-sec-name">MAIN COURSE — NON VEG</span>
+    <span class="menu-sec-count">14 items</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Chicken curry" style="width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid rgba(248,245,240,0.07);">
+    <img src="https://images.unsplash.com/photo-1574653853027-5382a3d23a15?w=600&q=80" alt="Butter chicken" style="width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="chicken kasha bengali 4 pcs" data-desc="slow cooked bengali dry chicken curry 4 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Kasha (4 pcs.) <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">❤️ Bengali</span></div><div class="mitem-desc">Slow-cooked Bengali dry chicken curry. 4 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹210</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Kasha" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken butter masala 4 pcs" data-desc="chicken in buttery masala sauce 4 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Butter Masala (4 pcs.)</div><div class="mitem-desc">Chicken in buttery, rich masala gravy. 4 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹260</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Butter%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken chap" data-desc="chicken chap Bengali style fried marinated chicken"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Chap</div><div class="mitem-desc">Marinated chicken chap — Bengali street style classic.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Chap" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="kadai chicken 4 pcs" data-desc="chicken cooked in kadai spicy gravy 4 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Kadai Chicken (4 pcs.)</div><div class="mitem-desc">Spicy kadai-style chicken with capsicum & onion. 4 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Kadai%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken do piyaza 4 pcs double onion" data-desc="chicken in double onion masala gravy 4 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Do Piyaza (4 pcs.)</div><div class="mitem-desc">Chicken with double onion masala gravy. 4 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Do%20Piyaza" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken bharta bengali" data-desc="smoky shredded chicken bharta bengali style"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Bharta</div><div class="mitem-desc">Smoky shredded chicken with mustard — Bengali style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Bharta" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken handi 4 pcs slow cooked" data-desc="chicken handi slow cooked in clay pot 4 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Handi (4 pcs.)</div><div class="mitem-desc">Slow-cooked handi chicken in rich gravy. 4 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Handi" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="egg tadka dal" data-desc="egg tadka with spices lentil"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Tadka</div><div class="mitem-desc">Lentil tadka with egg — wholesome and flavourful.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Tadka" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken tadka" data-desc="chicken tadka curry north indian style"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Tadka</div><div class="mitem-desc">Chicken cooked with aromatic tadka spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹130</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Tadka" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="egg chicken tadka" data-desc="egg and chicken tadka combined curry"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Chicken Tadka</div><div class="mitem-desc">Egg + chicken tadka combo — double the flavour.</div></div></div><div class="mitem-right"><span class="mitem-price">₹140</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Chicken%20Tadka" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken tikka butter masala 5 pcs" data-desc="chicken tikka butter masala 5 pieces creamy sauce"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Tikka Butter Masala (5 pcs.) <span class="badge badge-yellow" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Popular</span></div><div class="mitem-desc">Tikka pieces in rich butter masala sauce. 5 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹260</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Tikka%20Butter%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken reshmi butter masala 5 pcs" data-desc="chicken reshmi butter masala 5 pieces silky smooth"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Reshmi Butter Masala (5 pcs.)</div><div class="mitem-desc">Silky smooth reshmi chicken in butter masala. 5 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹270</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Reshmi%20Butter%20Masala" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken laziz special" data-desc="special laziz chicken preparation rich flavour"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Laziz</div><div class="mitem-desc">A special rich and flavourful chicken preparation.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Laziz" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken khurchan" data-desc="chicken khurchan scraped pan dish spicy"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Khurchan</div><div class="mitem-desc">Spicy pan-scraped chicken with bold masala.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Khurchan" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="china town special chicken" data-desc="house special chicken signature dish china town"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">China Town Special Chicken <span class="badge badge-yellow" style="font-size:0.6rem;padding:0.12rem 0.45rem;">⭐ Signature</span></div><div class="mitem-desc">Our house signature chicken dish. A must-try.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20China%20Town%20Special%20Chicken" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="mutton kasha 3 pcs bengali" data-desc="bengali style dry mutton curry 3 pieces slow cooked"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mutton Kasha (3 pcs.)</div><div class="mitem-desc">Slow-cooked Bengali dry mutton curry. 3 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹300</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mutton%20Kasha" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="mutton do piyaza 3 pcs" data-desc="mutton in double onion masala 3 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mutton Do Piyaza (3 pcs.)</div><div class="mitem-desc">Mutton in double onion masala gravy. 3 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹310</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mutton%20Do%20Piyaza" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="mutton handi 3 pcs slow cooked" data-desc="mutton handi slow cooked 3 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mutton Handi (3 pcs.)</div><div class="mitem-desc">Slow-cooked handi mutton. 3 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹310</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mutton%20Handi" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="mutton kadhai 3 pcs" data-desc="mutton kadhai spicy 3 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mutton Kadhai (3 pcs.)</div><div class="mitem-desc">Spicy kadhai-style mutton. 3 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹310</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mutton%20Kadhai" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ BIRYANI & RICE ═══ -->
+<div class="menu-sec" data-cat="biryani">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🍚</span>
+    <span class="menu-sec-name">BIRYANI &amp; RICE</span>
+    <span class="menu-sec-count">7 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1563379091339-03246963d96c?w=900&q=80" alt="Biryani" style="width:100%;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="chicken biryani" data-desc="aromatic chicken biryani long grain rice spices"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Biryani <span class="badge badge-red" style="font-size:0.6rem;padding:0.12rem 0.45rem;">🔥 Popular</span></div><div class="mitem-desc">Aromatic long-grain rice layered with spiced chicken.</div></div></div><div class="mitem-right"><span class="mitem-price">₹150<span class="pr"> / ₹200</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Biryani" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="mutton biryani" data-desc="slow cooked mutton biryani aromatic spices"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mutton Biryani</div><div class="mitem-desc">Slow-cooked mutton biryani with aromatic whole spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250<span class="pr"> / ₹350</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mutton%20Biryani" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="egg biryani" data-desc="egg biryani spiced rice with boiled eggs"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Biryani</div><div class="mitem-desc">Spiced rice with flavourful boiled eggs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹90</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Biryani" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="veg biryani vegetable" data-desc="vegetable biryani aromatic spiced rice veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg. Biryani</div><div class="mitem-desc">Aromatic vegetable biryani with whole spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹85</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Veg%20Biryani" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="steamed rice plain" data-desc="plain steamed white rice"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Steamed Rice</div><div class="mitem-desc">Plain steamed white rice.</div></div></div><div class="mitem-right"><span class="mitem-price">₹75</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Steamed%20Rice" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="peas pulao matar" data-desc="peas pulao fragrant rice with green peas"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Peas Pulao</div><div class="mitem-desc">Fragrant basmati rice with green peas and spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹150</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Peas%20Pulao" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mixed pulao" data-desc="mixed vegetable pulao fragrant rice"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mixed Pulao</div><div class="mitem-desc">Mixed vegetable pulao with fragrant spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹190</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mixed%20Pulao" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ TANDOOR & KEBAB ═══ -->
+<div class="menu-sec" data-cat="tandoor">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🔥</span>
+    <span class="menu-sec-name">TANDOOR &amp; KEBAB</span>
+    <span class="menu-sec-count">6 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=900&q=80" alt="Tandoor kebab" style="width:100%;height:150px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="chicken tandoor half full" data-desc="tandoor chicken half or full roasted in clay oven"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Tandoor <span class="badge badge-yellow" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Half / Full</span></div><div class="mitem-desc">Whole chicken marinated & roasted in clay tandoor oven.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250<span class="pr"> / ₹450</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Tandoor" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken tikka 6 pcs" data-desc="chicken tikka marinated grilled tandoor 6 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Tikka (6 pcs)</div><div class="mitem-desc">Marinated chicken grilled in tandoor. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹230</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Tikka" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="reshmi kebab 6 pcs silky" data-desc="silky smooth reshmi kebab 6 pieces grilled"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Reshmi Kebab (6 pcs)</div><div class="mitem-desc">Silky smooth grilled reshmi kebab. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹250</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Reshmi%20Kebab" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="paneer tikka kebab 6 pcs" data-desc="paneer tikka kebab grilled marinated 6 pieces veg"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Paneer Tikka Kebab (6 pcs)</div><div class="mitem-desc">Marinated paneer tikka kebab. 6 pcs. Veg.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Paneer%20Tikka%20Kebab" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="hariyali tikka green 6 pcs" data-desc="hariyali green tikka herb marinated 6 pieces"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Hariyali Tikka (6 pcs)</div><div class="mitem-desc">Herb-marinated green tikka. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹240</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Hariyali%20Tikka" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="malai tikka 6 pcs cream" data-desc="malai tikka creamy marinated chicken 6 pieces soft"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Malai Tikka (6 pcs)</div><div class="mitem-desc">Creamy malai-marinated chicken tikka. Melt-in-mouth. 6 pcs.</div></div></div><div class="mitem-right"><span class="mitem-price">₹280</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Malai%20Tikka" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ BREADS ═══ -->
+<div class="menu-sec" data-cat="breads">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🫓</span>
+    <span class="menu-sec-name">NAAN &amp; ROTI</span>
+    <span class="menu-sec-count">6 items</span>
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="tandoori roti" data-desc="tandoor baked roti wholemeal flatbread"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Tandoori Roti</div><div class="mitem-desc">Wholemeal flatbread baked in clay tandoor oven.</div></div></div><div class="mitem-right"><span class="mitem-price">₹20</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Tandoori%20Roti" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="tandoori roti butter" data-desc="butter tandoori roti flatbread with butter"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Tandoori Roti (Butter)</div><div class="mitem-desc">Tandoori roti brushed with butter.</div></div></div><div class="mitem-right"><span class="mitem-price">₹25</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Tandoori%20Roti%20Butter" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="tandoori naan" data-desc="soft tandoor baked naan leavened bread"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Tandoori Naan</div><div class="mitem-desc">Soft leavened naan baked in the tandoor.</div></div></div><div class="mitem-right"><span class="mitem-price">₹40</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Tandoori%20Naan" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="tandoori butter naan" data-desc="butter naan tandoor baked with generous butter"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Tandoori Butter Naan</div><div class="mitem-desc">Tandoori naan brushed with generous butter.</div></div></div><div class="mitem-right"><span class="mitem-price">₹45</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Tandoori%20Butter%20Naan" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="garlic naan" data-desc="naan with garlic butter topping soft"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Garlic Naan <span class="badge badge-yellow" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Popular</span></div><div class="mitem-desc">Soft naan with buttery garlic topping.</div></div></div><div class="mitem-right"><span class="mitem-price">₹45</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Garlic%20Naan" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="lachha paratha layered" data-desc="layered flaky lachha paratha shallow fried"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Lachha Paratha</div><div class="mitem-desc">Flaky multi-layered paratha, shallow-fried to perfection.</div></div></div><div class="mitem-right"><span class="mitem-price">₹30</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Lachha%20Paratha" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ ROLLS & SANDWICH ═══ -->
+<div class="menu-sec" data-cat="rolls">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🌯</span>
+    <span class="menu-sec-name">ROLLS &amp; SANDWICH</span>
+    <span class="menu-sec-count">8 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=900&q=80" alt="Rolls" style="width:100%;height:130px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="nonveg" data-name="egg roll single double" data-desc="egg roll single or double egg"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Roll (Single / Double)</div><div class="mitem-desc">Classic egg roll — single or double egg.</div></div></div><div class="mitem-right"><span class="mitem-price">₹45<span class="pr"> / ₹55</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Roll" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken roll" data-desc="chicken filled roll street style"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Roll</div><div class="mitem-desc">Stuffed chicken roll — street style favourite.</div></div></div><div class="mitem-right"><span class="mitem-price">₹70</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Roll" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="egg chicken roll" data-desc="egg and chicken combined roll"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Egg Chicken Roll</div><div class="mitem-desc">Egg + chicken combo roll.</div></div></div><div class="mitem-right"><span class="mitem-price">₹85</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Egg%20Chicken%20Roll" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="paneer roll" data-desc="paneer filled roll veg street style"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Paneer Roll</div><div class="mitem-desc">Spiced paneer filled roll — veg street style.</div></div></div><div class="mitem-right"><span class="mitem-price">₹80</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Paneer%20Roll" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="omelet double omelette" data-desc="double omelette roll egg"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Omlet Double</div><div class="mitem-desc">Double egg omelette roll.</div></div></div><div class="mitem-right"><span class="mitem-price">₹40</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Omlet%20Double" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="sweet corn cheese sandwich jumbo" data-desc="sweet corn and cheese sandwich jumbo slice"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Sweet Corn &amp; Cheese Sandwich <span class="badge badge-green" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Jumbo Slice</span></div><div class="mitem-desc">Jumbo sweet corn and melted cheese sandwich.</div></div></div><div class="mitem-right"><span class="mitem-price">₹100</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Sweet%20Corn%20Cheese%20Sandwich" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="paneer grill sandwich jumbo" data-desc="grilled paneer sandwich jumbo slice"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Paneer Grill Sandwich <span class="badge badge-green" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Jumbo Slice</span></div><div class="mitem-desc">Grilled paneer sandwich — jumbo slice.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Paneer%20Grill%20Sandwich" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken corn cheese sandwich jumbo" data-desc="chicken corn and cheese sandwich jumbo slice"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Corn Cheese Sandwich <span class="badge badge-green" style="font-size:0.6rem;padding:0.12rem 0.45rem;">Jumbo Slice</span></div><div class="mitem-desc">Chicken, corn & cheese — jumbo slice sandwich.</div></div></div><div class="mitem-right"><span class="mitem-price">₹125</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Corn%20Cheese%20Sandwich" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PASTA ═══ -->
+<div class="menu-sec" data-cat="pasta">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🍝</span>
+    <span class="menu-sec-name">PASTA</span>
+    <span class="menu-sec-count">3 items</span>
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="white sauce pasta veg chicken" data-desc="pasta in creamy white sauce veg or chicken"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">White Sauce Pasta</div><div class="mitem-desc">Creamy white sauce pasta. Veg ₹120 / Chicken ₹150.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120<span class="pr"> / ₹150</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20White%20Sauce%20Pasta" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="red sauce pasta arrabbiata veg chicken" data-desc="pasta in spicy tomato red sauce veg or chicken"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Red Sauce Pasta</div><div class="mitem-desc">Spicy tomato red sauce pasta. Veg ₹110 / Chicken ₹140.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110<span class="pr"> / ₹140</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Red%20Sauce%20Pasta" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mixed sauce pasta veg chicken" data-desc="pasta in mixed white and red sauce veg or chicken"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mixed Sauce Pasta</div><div class="mitem-desc">Best of both — mixed white & red sauce pasta. Veg ₹130 / Chicken ₹160.</div></div></div><div class="mitem-right"><span class="mitem-price">₹130<span class="pr"> / ₹160</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mixed%20Sauce%20Pasta" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SALAD ═══ -->
+<div class="menu-sec" data-cat="salad">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🥗</span>
+    <span class="menu-sec-name">SALAD</span>
+    <span class="menu-sec-count">5 items</span>
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="onion salad" data-desc="fresh onion salad with lemon"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Onion Salad</div><div class="mitem-desc">Fresh sliced onion salad with lemon and spices.</div></div></div><div class="mitem-right"><span class="mitem-price">₹50</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Onion%20Salad" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="cucumber salad" data-desc="fresh cucumber salad cooling refreshing"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Cucumber Salad</div><div class="mitem-desc">Fresh and cooling cucumber salad.</div></div></div><div class="mitem-right"><span class="mitem-price">₹50</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Cucumber%20Salad" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="green salad" data-desc="mixed green salad fresh vegetables"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Green Salad</div><div class="mitem-desc">Mixed green salad with fresh seasonal vegetables.</div></div></div><div class="mitem-right"><span class="mitem-price">₹80</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Green%20Salad" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="veg raita yogurt" data-desc="fresh vegetable raita yogurt dip cooling"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Veg. Raita</div><div class="mitem-desc">Cooling fresh vegetable raita in yogurt.</div></div></div><div class="mitem-right"><span class="mitem-price">₹80</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Veg%20Raita" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="nonveg" data-name="chicken salad" data-desc="grilled chicken salad fresh vegetables"><div class="mitem-left"><span class="mitem-dot"><span class="nonveg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chicken Salad</div><div class="mitem-desc">Tender grilled chicken with fresh salad greens.</div></div></div><div class="mitem-right"><span class="mitem-price">₹160</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chicken%20Salad" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ DRINKS ═══ -->
+<div class="menu-sec" data-cat="drinks">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">🥤</span>
+    <span class="menu-sec-name">BEVERAGES &amp; MOCKTAILS</span>
+    <span class="menu-sec-count">20 items</span>
+  </div>
+  <div style="margin-bottom:1rem;">
+    <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=900&q=80" alt="Drinks mocktails" style="width:100%;height:130px;object-fit:cover;border-radius:12px;border:1px solid rgba(248,245,240,0.07);">
+  </div>
+  <div class="items-list">
+    <div class="mitem" data-type="veg" data-name="standard tea chai" data-desc="standard regular tea hot"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Standard Tea</div><div class="mitem-desc">Classic hot chai — the perfect start.</div></div></div><div class="mitem-right"><span class="mitem-price">₹15</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Standard%20Tea" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="tea large big" data-desc="large tea hot chai big cup"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Tea Large</div><div class="mitem-desc">Large hot chai — big cup.</div></div></div><div class="mitem-right"><span class="mitem-price">₹30</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Tea%20Large" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="black tea" data-desc="black tea hot without milk"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Black Tea</div><div class="mitem-desc">Hot black tea without milk.</div></div></div><div class="mitem-right"><span class="mitem-price">₹15</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Black%20Tea" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="lemon tea" data-desc="lemon tea hot tangy refreshing"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Lemon Tea</div><div class="mitem-desc">Tangy hot lemon tea.</div></div></div><div class="mitem-right"><span class="mitem-price">₹20</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Lemon%20Tea" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="black tea with honey" data-desc="black tea with honey sweet warm"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Black Tea with Honey</div><div class="mitem-desc">Black tea sweetened with natural honey.</div></div></div><div class="mitem-right"><span class="mitem-price">₹25</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Black%20Tea%20with%20Honey" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="black coffee" data-desc="hot black coffee strong americano"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Black Coffee</div><div class="mitem-desc">Strong hot black coffee.</div></div></div><div class="mitem-right"><span class="mitem-price">₹30</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Black%20Coffee" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="coffee with milk latte" data-desc="coffee with milk warm hot latte"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Coffee with Milk</div><div class="mitem-desc">Warm coffee with fresh milk.</div></div></div><div class="mitem-right"><span class="mitem-price">₹40</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Coffee%20with%20Milk" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="green tea plain" data-desc="plain green tea healthy hot"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Green Tea Plain</div><div class="mitem-desc">Light and healthy plain green tea.</div></div></div><div class="mitem-right"><span class="mitem-price">₹25</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Green%20Tea" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="green tea with honey" data-desc="green tea with honey healthy sweet warm"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Green Tea with Honey</div><div class="mitem-desc">Green tea sweetened with natural honey.</div></div></div><div class="mitem-right"><span class="mitem-price">₹30</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Green%20Tea%20with%20Honey" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="fresh lime soda nimbu soda" data-desc="fresh lime soda chilled refreshing mocktail"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Fresh Lime Soda</div><div class="mitem-desc">Chilled fresh lime soda — perfectly refreshing.</div></div></div><div class="mitem-right"><span class="mitem-price">₹60</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Fresh%20Lime%20Soda" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="lassi yogurt drink" data-desc="thick creamy lassi sweet or salted yogurt drink"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Lassi</div><div class="mitem-desc">Thick creamy yogurt lassi — sweet or salted.</div></div></div><div class="mitem-right"><span class="mitem-price">₹70</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Lassi" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="masala cold drinks spiced soda" data-desc="spiced cold masala drink chilled mocktail"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Masala Cold Drinks</div><div class="mitem-desc">Spiced cold drink with tangy masala mix.</div></div></div><div class="mitem-right"><span class="mitem-price">₹70</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Masala%20Cold%20Drinks" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="virgin mojito mocktail mint lime" data-desc="virgin mojito mint lime soda mocktail refreshing"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Virgin Mojito</div><div class="mitem-desc">Mint, lime & soda mocktail — fresh and fizzy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹90</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Virgin%20Mojito" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="orange mojito mocktail" data-desc="orange mojito mocktail fresh citrus soda"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Orange Mojito</div><div class="mitem-desc">Citrusy orange mojito mocktail.</div></div></div><div class="mitem-right"><span class="mitem-price">₹100</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Orange%20Mojito" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="pina colada mocktail pineapple coconut" data-desc="pina colada tropical mocktail pineapple coconut cream"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Pina Colada</div><div class="mitem-desc">Tropical pineapple & coconut cream mocktail.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Pina%20Colada" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="kiwi lemonade mocktail" data-desc="kiwi lemonade mocktail fresh chilled sweet tangy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Kiwi Lemonade</div><div class="mitem-desc">Fresh kiwi lemonade mocktail — sweet and tangy.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Kiwi%20Lemonade" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="blue lagoon mocktail" data-desc="blue lagoon blue colour mocktail sweet tropical"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Blue Lagoon</div><div class="mitem-desc">Beautiful blue tropical mocktail.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Blue%20Lagoon" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="strawberry pop soda mocktail" data-desc="strawberry pop soda fizzy sweet mocktail"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Strawberry Pop Soda</div><div class="mitem-desc">Fizzy strawberry pop soda mocktail.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Strawberry%20Pop%20Soda" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="cold coffee ice cream shake" data-desc="cold coffee with ice cream milkshake blended sweet"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Cold Coffee with Ice-Cream</div><div class="mitem-desc">Blended cold coffee with a scoop of ice cream.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Cold%20Coffee%20Ice%20Cream" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="chocolate milk shake" data-desc="thick chocolate milkshake sweet creamy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Chocolate Milk Shake</div><div class="mitem-desc">Thick and creamy chocolate milkshake.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Chocolate%20Milk%20Shake" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="strawberry milk shake" data-desc="strawberry milkshake pink sweet fruity"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Strawberry Milk Shake</div><div class="mitem-desc">Sweet and fruity strawberry milkshake.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Strawberry%20Milk%20Shake" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="vanilla milk shake" data-desc="classic vanilla milkshake smooth creamy"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Vanilla Milk Shake</div><div class="mitem-desc">Classic smooth creamy vanilla milkshake.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Vanilla%20Milk%20Shake" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="vanilla strawberry shake" data-desc="vanilla and strawberry combined milkshake"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Vanilla &amp; Strawberry Shake</div><div class="mitem-desc">Vanilla + strawberry combo milkshake.</div></div></div><div class="mitem-right"><span class="mitem-price">₹120</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Vanilla%20Strawberry%20Shake" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="mango milk ice cream shake" data-desc="mango ice cream milkshake tropical sweet"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Mango Milk Ice Cream</div><div class="mitem-desc">Tropical mango milkshake with ice cream.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Mango%20Milk%20Ice%20Cream" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="kiwi milk shake" data-desc="kiwi milkshake green fruity sweet"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Kiwi Milk Shake</div><div class="mitem-desc">Fresh kiwi milkshake — fruity and refreshing.</div></div></div><div class="mitem-right"><span class="mitem-price">₹110</span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Kiwi%20Milk%20Shake" class="btn-order-mini" target="_blank">Order</a></div></div>
+    <div class="mitem" data-type="veg" data-name="cold drinks soft drink cola pepsi sprite" data-desc="assorted cold soft drinks chilled canned bottled"><div class="mitem-left"><span class="mitem-dot"><span class="veg-dot"></span></span><div class="mitem-info"><div class="mitem-name">Cold Drinks</div><div class="mitem-desc">Assorted chilled soft drinks (Pepsi, Sprite, etc.).</div></div></div><div class="mitem-right"><span class="mitem-price">₹40<span class="pr">–₹60</span></span><a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20order%20Cold%20Drinks" class="btn-order-mini" target="_blank">Order</a></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ COMBOS ═══ -->
+<div class="menu-sec" data-cat="combos">
+  <div class="menu-sec-header">
+    <span class="menu-sec-icon">⚡</span>
+    <span class="menu-sec-name">STUDENT COMBOS</span>
+    <span class="menu-sec-count">3 deals</span>
+  </div>
+  <div class="combos-grid">
+    <div class="combo-card mitem" data-type="nonveg" data-name="chowmein chilli chicken noodles combo deal" data-desc="chicken chowmein chilli chicken combo student deal">
+      <div class="combo-label">🍜 Noodles Deal</div>
+      <div class="combo-name">Chowmein + Chilli Chicken</div>
+      <div class="combo-desc">Chicken Chowmein (full) + Chilli Chicken (half) + Chutney</div>
+      <div class="combo-footer">
+        <div><div class="combo-price">₹180</div><div class="combo-save">Save ₹80 vs à la carte</div></div>
+        <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20the%20Noodles%20Combo%20at%20%E2%82%B9180" class="btn btn-yellow" style="padding:0.5rem 1rem;font-size:0.8rem;" target="_blank">Order</a>
+      </div>
+    </div>
+    <div class="combo-card mitem" data-type="nonveg" data-name="fried rice chicken kasha rice combo deal" data-desc="chicken fried rice chicken kasha garlic naan most popular combo">
+      <div style="position:absolute;top:10px;right:10px;"><span class="badge badge-red" style="font-size:0.62rem;">Most Popular</span></div>
+      <div class="combo-label">🍗 Rice Deal</div>
+      <div class="combo-name">Fried Rice + Chicken Kasha</div>
+      <div class="combo-desc">Chicken Fried Rice (full) + Chicken Kasha (half) + Garlic Naan</div>
+      <div class="combo-footer">
+        <div><div class="combo-price">₹200</div><div class="combo-save">Save ₹130 vs à la carte</div></div>
+        <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20the%20Rice%20Combo%20at%20%E2%82%B9200" class="btn btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;" target="_blank">Order</a>
+      </div>
+    </div>
+    <div class="combo-card mitem" data-type="veg" data-name="momos cold drink snack combo deal" data-desc="veg or chicken momos cold drink combo student snack deal">
+      <div class="combo-label">🥟 Snack Deal</div>
+      <div class="combo-name">Momos + Cold Drink</div>
+      <div class="combo-desc">Veg or Chicken Momos (8 pcs) + Cold Drink + Chutney</div>
+      <div class="combo-footer">
+        <div><div class="combo-price">₹120</div><div class="combo-save">Save ₹40 vs à la carte</div></div>
+        <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20the%20Momos%20Combo%20at%20%E2%82%B9120" class="btn btn-yellow" style="padding:0.5rem 1rem;font-size:0.8rem;" target="_blank">Order</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NO RESULTS -->
+<div class="no-results" id="no-results">
+  <div class="no-results-emoji">🔍</div>
+  <h3>No dishes found</h3>
+  <p>Try a different word or <button class="nr-clear" id="nr-clear-btn">clear search</button></p>
+</div>
+
+</div><!-- end #menu-body -->
+
+<!-- FOOTER -->
+<footer style="margin-bottom:80px;">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">THE CHINA TOWN</div>
+      <div class="footer-brand-bn">দি চায়না টাউন</div>
+      <p class="footer-desc">Barasat's favourite multi-cuisine restaurant — Chinese, Indian, Bengali, Mughlai & more.</p>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <a href="tel:+919330717538" style="color:inherit;text-decoration:none;">+91 93307 17538</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">QUICK LINKS</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Our Menu</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="https://wa.me/919330717538" target="_blank">Order on WhatsApp</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">OPENING HOURS</div>
+      <ul class="footer-links">
+        <li><a href="#">Mon – Fri: 11am – 10pm</a></li>
+        <li><a href="#">Sat – Sun: 10am – 11pm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 The China Town, Barasat.</p>
+    <div class="footer-rating-badge">⭐ 4.0 — 200+ Reviews</div>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="float-wa" target="_blank" aria-label="Order on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<!-- STICKY ORDER -->
+<div class="sticky-order">
+  <div class="sticky-order-text"><strong>Ready to order?</strong> Tell us what you want — we'll have it ready fast.</div>
+  <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="btn btn-whatsapp" target="_blank">
+    <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    Order on WhatsApp
+  </a>
+  <a href="tel:+919330717538" class="btn btn-secondary">📞 Call</a>
+</div>
+
+<script src="script.js"></script>
+<script>
+(function () {
+  var searchInput = document.getElementById('search-input');
+  var clearBtn    = document.getElementById('search-clear');
+  var nrClearBtn  = document.getElementById('nr-clear-btn');
+  var noResults   = document.getElementById('no-results');
+  var filterBtns  = document.querySelectorAll('.filter-btn');
+  var vegToggle   = document.getElementById('veg-toggle');
+  var allSections = document.querySelectorAll('.menu-sec');
+
+  function isVegOnly() { return vegToggle && vegToggle.checked; }
+
+  function shouldShowItem(item, query) {
+    if (isVegOnly() && item.dataset.type === 'nonveg') return false;
+    if (!query) return true;
+    var hay = (item.dataset.name || '') + ' ' + (item.dataset.desc || '');
+    return hay.indexOf(query) !== -1;
+  }
+
+  function applyFilters() {
+    var query = searchInput.value.trim().toLowerCase();
+    var activeCat = document.querySelector('.filter-btn.active');
+    var cat = activeCat ? activeCat.dataset.cat : 'all';
+    var useSearch = query.length > 0;
+
+    clearBtn.classList.toggle('show', query.length > 0);
+    var anyVisible = false;
+
+    allSections.forEach(function (sec) {
+      var secCat = sec.dataset.cat;
+      var catMatch = (cat === 'all' || secCat === cat);
+      if (!useSearch && !catMatch) { sec.style.display = 'none'; return; }
+      sec.style.display = '';
+      var secHasItem = false;
+      sec.querySelectorAll('.mitem').forEach(function (item) {
+        if (shouldShowItem(item, query)) {
+          item.style.display = '';
+          secHasItem = true;
+          anyVisible = true;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      if (!secHasItem) sec.style.display = 'none';
+    });
+
+    noResults.classList.toggle('show', !anyVisible);
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  function doClear() { searchInput.value = ''; applyFilters(); searchInput.focus(); }
+  clearBtn.addEventListener('click', doClear);
+  if (nrClearBtn) nrClearBtn.addEventListener('click', doClear);
+
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      filterBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      searchInput.value = '';
+      applyFilters();
+    });
+  });
+
+  if (vegToggle) vegToggle.addEventListener('change', applyFilters);
+})();
+</script>
+</body>
+</html>

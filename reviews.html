@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Customer reviews of The China Town Barasat. 4.0 stars from 200+ customers. See what students and locals say about our food and service.">
+  <title>Reviews — The China Town, Barasat</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ─── REVIEWS HERO ─── */
+    .reviews-hero {
+      padding: calc(var(--nav-h) + 4.5rem) 4vw 4rem;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at center top, rgba(255,195,0,0.08) 0%, transparent 60%),
+        var(--black-2);
+      border-bottom: 1px solid rgba(248,245,240,0.06);
+    }
+
+    .reviews-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1;
+    }
+
+    .reviews-hero p {
+      color: var(--white-dim);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0.75rem auto 0;
+    }
+
+    /* ─── RATING OVERVIEW ─── */
+    .rating-overview {
+      padding: 5rem 4vw;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .rating-overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .rating-big {
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--black-3);
+      border: 1px solid rgba(255,195,0,0.15);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rating-big::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,195,0,0.05) 0%, transparent 70%);
+    }
+
+    .rating-number {
+      font-family: var(--font-display);
+      font-size: 6rem;
+      line-height: 1;
+      color: var(--yellow);
+      position: relative;
+    }
+
+    .rating-stars-big {
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      margin: 0.5rem 0;
+    }
+
+    .rating-count {
+      font-size: 0.85rem;
+      color: var(--white-dim);
+    }
+
+    .rating-badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    /* ─── STAR BARS ─── */
+    .star-bars { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .star-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .star-bar-label {
+      font-size: 0.82rem;
+      color: var(--white-dim);
+      width: 40px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .star-bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(248,245,240,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .star-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), var(--yellow));
+      border-radius: 8px;
+      width: 0%;
+    }
+
+    .star-bar-pct {
+      font-size: 0.78rem;
+      color: var(--white-dim);
+      width: 36px;
+      flex-shrink: 0;
+    }
+
+    /* ─── REVIEWS GRID ─── */
+    .reviews-section {
+      padding: 0 4vw 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .reviews-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .review-sort {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .sort-btn {
+      background: rgba(248,245,240,0.06);
+      border: 1px solid rgba(248,245,240,0.1);
+      color: var(--white-dim);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all var(--transition);
+    }
+
+    .sort-btn.active, .sort-btn:hover {
+      background: var(--red);
+      border-color: var(--red);
+      color: var(--white);
+    }
+
+    .reviews-masonry {
+      columns: 3;
+      column-gap: 1.5rem;
+    }
+
+    .review-card {
+      background: var(--black-3);
+      border: 1px solid rgba(248,245,240,0.07);
+      border-radius: 14px;
+      padding: 1.6rem;
+      margin-bottom: 1.5rem;
+      break-inside: avoid;
+      transition: transform var(--transition), border-color var(--transition);
+    }
+
+    .review-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,195,0,0.2);
+    }
+
+    .review-card.featured {
+      border-color: rgba(255,195,0,0.25);
+      background: linear-gradient(135deg, rgba(255,195,0,0.04) 0%, var(--black-3) 100%);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .review-author-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .review-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(230,57,70,0.35);
+    }
+
+    .review-author-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 1px;
+    }
+
+    .review-author-tag {
+      font-size: 0.73rem;
+      color: var(--white-dim);
+    }
+
+    .review-stars {
+      color: var(--yellow);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    .review-text {
+      font-size: 0.875rem;
+      color: rgba(248,245,240,0.75);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .review-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .review-date {
+      font-size: 0.72rem;
+      color: rgba(248,245,240,0.3);
+    }
+
+    .review-item-tag {
+      font-size: 0.72rem;
+      background: rgba(230,57,70,0.1);
+      border: 1px solid rgba(230,57,70,0.2);
+      color: var(--red);
+      padding: 0.15rem 0.55rem;
+      border-radius: 20px;
+    }
+
+    .review-helpful {
+      font-size: 0.72rem;
+      color: rgba(248,245,240,0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* ─── WRITE REVIEW CTA ─── */
+    .write-review {
+      padding: 5rem 4vw;
+      background: var(--black-2);
+      border-top: 1px solid rgba(248,245,240,0.06);
+      text-align: center;
+    }
+
+    .write-review-inner { max-width: 600px; margin: 0 auto; }
+
+    .write-review h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+    }
+
+    .write-review p {
+      color: var(--white-dim);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .write-review-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── HIGHLIGHTS STRIP ─── */
+    .highlights {
+      padding: 3rem 4vw;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .highlight-card {
+      background: var(--black-3);
+      border: 1px solid rgba(248,245,240,0.07);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .highlight-card:hover {
+      border-color: rgba(230,57,70,0.3);
+      transform: translateY(-4px);
+    }
+
+    .highlight-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+    .highlight-label { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .highlight-sub { font-size: 0.75rem; color: var(--white-dim); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .reviews-masonry { columns: 2; }
+      .rating-overview-grid { grid-template-columns: 1fr; }
+      .rating-big { max-width: 300px; margin: 0 auto; }
+      .highlights-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .reviews-masonry { columns: 1; }
+      .highlights-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-en">THE CHINA TOWN</span>
+    <span class="nav-logo-bn">দি চায়না টাউন</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li>
+      <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="nav-cta" target="_blank">Order Now →</a>
+    </li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- REVIEWS HERO -->
+<div class="reviews-hero">
+  <span class="section-label" style="justify-content:center;">Social Proof</span>
+  <h1>Customer <span class="text-yellow">Reviews</span></h1>
+  <p>Real words from real customers. Join 200+ happy diners who love The China Town.</p>
+  <div style="margin-top:1.5rem;display:flex;align-items:center;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <span class="badge badge-yellow">⭐ 4.0 Overall</span>
+    <span class="badge badge-green">✓ 200+ Reviews</span>
+    <span class="badge badge-red">🎓 Students Love Us</span>
+  </div>
+</div>
+
+<!-- HIGHLIGHTS -->
+<div class="highlights">
+  <div class="highlights-grid">
+    <div class="highlight-card reveal">
+      <div class="highlight-emoji">🥟</div>
+      <div class="highlight-label">Momos Praised</div>
+      <div class="highlight-sub">in 80% of reviews</div>
+    </div>
+    <div class="highlight-card reveal reveal-delay-1">
+      <div class="highlight-emoji">⚡</div>
+      <div class="highlight-label">Fast Service</div>
+      <div class="highlight-sub">mentioned consistently</div>
+    </div>
+    <div class="highlight-card reveal reveal-delay-2">
+      <div class="highlight-emoji">💰</div>
+      <div class="highlight-label">Value for Money</div>
+      <div class="highlight-sub">top positive keyword</div>
+    </div>
+    <div class="highlight-card reveal reveal-delay-3">
+      <div class="highlight-emoji">🔄</div>
+      <div class="highlight-label">Repeat Visitors</div>
+      <div class="highlight-sub">high return rate</div>
+    </div>
+  </div>
+</div>
+
+<!-- RATING OVERVIEW -->
+<div class="rating-overview">
+  <div class="rating-overview-grid">
+
+    <div class="rating-big reveal">
+      <div class="rating-number">4.0</div>
+      <div class="rating-stars-big">★★★★☆</div>
+      <div class="rating-count">Based on 200+ reviews</div>
+      <div class="rating-badge-row">
+        <span class="badge badge-yellow">Google Reviews</span>
+        <span class="badge badge-green">Verified</span>
+      </div>
+    </div>
+
+    <div class="star-bars reveal reveal-delay-1">
+      <h3 style="font-family:var(--font-serif);font-size:1.4rem;margin-bottom:1.5rem;">Rating <span class="text-yellow">Breakdown</span></h3>
+
+      <div class="star-bar-row">
+        <div class="star-bar-label">5 ★</div>
+        <div class="star-bar-track"><div class="star-fill" data-pct="52"></div></div>
+        <div class="star-bar-pct">52%</div>
+      </div>
+      <div class="star-bar-row">
+        <div class="star-bar-label">4 ★</div>
+        <div class="star-bar-track"><div class="star-fill" data-pct="28"></div></div>
+        <div class="star-bar-pct">28%</div>
+      </div>
+      <div class="star-bar-row">
+        <div class="star-bar-label">3 ★</div>
+        <div class="star-bar-track"><div class="star-fill" data-pct="11"></div></div>
+        <div class="star-bar-pct">11%</div>
+      </div>
+      <div class="star-bar-row">
+        <div class="star-bar-label">2 ★</div>
+        <div class="star-bar-track"><div class="star-fill" data-pct="6"></div></div>
+        <div class="star-bar-pct">6%</div>
+      </div>
+      <div class="star-bar-row">
+        <div class="star-bar-label">1 ★</div>
+        <div class="star-bar-track"><div class="star-fill" data-pct="3"></div></div>
+        <div class="star-bar-pct">3%</div>
+      </div>
+
+      <p style="color:var(--white-dim);font-size:0.82rem;margin-top:1.5rem;">
+        80% of customers rate us 4 stars or above. We're proud of the trust our local community places in us.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- REVIEWS GRID -->
+<div class="reviews-section">
+  <div class="reviews-section-header reveal">
+    <div>
+      <span class="section-label">What People Say</span>
+      <h2 class="section-heading" style="font-size:1.8rem;">Customer <span class="text-red">Stories</span></h2>
+    </div>
+    <div class="review-sort">
+      <button class="sort-btn active">Most Recent</button>
+      <button class="sort-btn">Top Rated</button>
+    </div>
+  </div>
+
+  <div class="reviews-masonry">
+
+    <div class="review-card featured reveal">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=5" alt="Priya">
+          <div>
+            <div class="review-author-name">Priya Sharma</div>
+            <div class="review-author-tag">🎓 Adamas University</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <p class="review-text">The momos here are absolutely amazing! Crispy on the outside, perfectly juicy inside — and the chutney is fire. I've tried momos all over Barasat but nothing comes close to this. ❤️ Been coming here 3x a week now.</p>
+      <div class="review-footer">
+        <span class="review-date">2 weeks ago</span>
+        <span class="review-item-tag">Chicken Momos</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=15" alt="Rahul">
+          <div>
+            <div class="review-author-name">Rahul Das</div>
+            <div class="review-author-tag">B.Tech, Adamas</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <p class="review-text">Perfect place for us students. The combo deals are genuinely worth every rupee — rice + chicken kasha combo is my go-to meal after labs. Fast service too!</p>
+      <div class="review-footer">
+        <span class="review-date">1 month ago</span>
+        <span class="review-item-tag">Rice Combo</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=25" alt="Ananya">
+          <div>
+            <div class="review-author-name">Ananya Roy</div>
+            <div class="review-author-tag">Regular Customer</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+      </div>
+      <p class="review-text">Ordered via WhatsApp and food was ready by the time I walked in. The Schezwan noodles were spicy perfection. Great taste, great value!</p>
+      <div class="review-footer">
+        <span class="review-date">3 weeks ago</span>
+        <span class="review-item-tag">Schezwan Noodles</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=33" alt="Arjun">
+          <div>
+            <div class="review-author-name">Arjun Bose</div>
+            <div class="review-author-tag">MBA Student</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <p class="review-text">Best place near Adamas for a quick, filling meal. Chilli chicken is the star — perfectly crispy with that tangy sauce. Combos are seriously worth it. Highly recommend to all campus students! 🙌</p>
+      <div class="review-footer">
+        <span class="review-date">1 month ago</span>
+        <span class="review-item-tag">Chilli Chicken</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=44" alt="Sneha">
+          <div>
+            <div class="review-author-name">Sneha Ghosh</div>
+            <div class="review-author-tag">Local Family</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+      </div>
+      <p class="review-text">Came here with my family on a Sunday. The chicken kasha was excellent — reminded me of home cooking but better. Kids loved the fried rice. Will definitely come back.</p>
+      <div class="review-footer">
+        <span class="review-date">2 months ago</span>
+        <span class="review-item-tag">Chicken Kasha</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=52" alt="Vikram">
+          <div>
+            <div class="review-author-name">Vikram Nair</div>
+            <div class="review-author-tag">Engineering Student</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <p class="review-text">Budget-friendly AND delicious — that combo is rare. Momos + drink deal is unbeatable for ₹120. Staff is friendly and the food comes super fast. 10/10 would recommend.</p>
+      <div class="review-footer">
+        <span class="review-date">3 months ago</span>
+        <span class="review-item-tag">Momos Combo</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=61" alt="Tania">
+          <div>
+            <div class="review-author-name">Tania Mukherjee</div>
+            <div class="review-author-tag">BBA Student</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+      </div>
+      <p class="review-text">Perfect for a quick lunch between classes. Ordered the chowmein — was hot, tasty, and ready in under 10 minutes. The location right opposite Adamas is super convenient.</p>
+      <div class="review-footer">
+        <span class="review-date">1 month ago</span>
+        <span class="review-item-tag">Chowmein</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=70" alt="Debayan">
+          <div>
+            <div class="review-author-name">Debayan Sarkar</div>
+            <div class="review-author-tag">Local Resident</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <p class="review-text">Butter chicken here gives proper restaurant vibes without the price tag. Naan was soft and fresh. Very hygienic kitchen from what I could see. Solid 5 stars from me.</p>
+      <div class="review-footer">
+        <span class="review-date">2 months ago</span>
+        <span class="review-item-tag">Butter Chicken</span>
+      </div>
+    </div>
+
+    <div class="review-card reveal">
+      <div class="review-header">
+        <div class="review-author-row">
+          <img class="review-avatar" src="https://i.pravatar.cc/80?img=19" alt="Koushik">
+          <div>
+            <div class="review-author-name">Koushik Paul</div>
+            <div class="review-author-tag">Adamas Faculty</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+      </div>
+      <p class="review-text">A hidden gem right outside the campus. The multi-cuisine menu is impressive for a casual dining spot. Chicken bharta was a pleasant surprise — very authentic Bengali taste.</p>
+      <div class="review-footer">
+        <span class="review-date">6 weeks ago</span>
+        <span class="review-item-tag">Chicken Bharta</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- WRITE REVIEW CTA -->
+<section class="write-review">
+  <div class="write-review-inner reveal">
+    <span class="section-label" style="justify-content:center;">Your Turn</span>
+    <h2>Join <span class="text-yellow">200+</span> Happy Customers</h2>
+    <p>Tried our food? We'd love to hear from you. Share your experience or order now and make your own memory.</p>
+    <div class="write-review-btns">
+      <a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="btn btn-whatsapp btn-lg" target="_blank">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Order Now
+      </a>
+      <a href="https://g.page/r/review" class="btn btn-secondary btn-lg" target="_blank">Leave a Google Review ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">THE CHINA TOWN</div>
+      <div class="footer-brand-bn">দি চায়না টাউন</div>
+      <p class="footer-desc">Barasat's favourite Chinese & multi-cuisine restaurant. Serving authentic flavours to students and families.</p>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Barrackpore-Barasat Rd, Opp. Adamas University, Barasat, WB 700126
+      </div>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <a href="tel:+919330717538" style="color:inherit;text-decoration:none;">+91 93304 56566</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">QUICK LINKS</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Our Menu</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="https://wa.me/919330717538" target="_blank">Order on WhatsApp</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">CUISINES</div>
+      <ul class="footer-links">
+        <li><a href="menu.html">Chinese</a></li>
+        <li><a href="menu.html">North Indian</a></li>
+        <li><a href="menu.html">Bengali</a></li>
+        <li><a href="menu.html">Mughlai</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 The China Town, Barasat. All rights reserved.</p>
+    <div class="footer-rating-badge">⭐ 4.0 — Rated by 200+ customers</div>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/919330717538?text=Hi!%20I%20want%20to%20place%20an%20order" class="float-wa" target="_blank" aria-label="Order on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
